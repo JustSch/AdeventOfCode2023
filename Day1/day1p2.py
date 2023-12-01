@@ -54,7 +54,7 @@ for line in puzzle_input:
         #print(line[i-j:i+1])
         if line[i-j:i+1] in num_dict:
             num_as_int = num_dict[line[i-j:i+1]]
-            print('first number: {}'.format(num_as_int))
+            print('second number: {}'.format(num_as_int))
             sum += (int(num_as_int))
             matchFound = True
             break
