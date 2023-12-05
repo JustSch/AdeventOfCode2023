@@ -1,8 +1,8 @@
 from pathlib import Path
 import sys
 
-puzzle_input_file_path = Path(__file__).with_name('example.txt')
-#puzzle_input_file_path = Path(__file__).with_name('input.txt')
+#puzzle_input_file_path = Path(__file__).with_name('example.txt')
+puzzle_input_file_path = Path(__file__).with_name('input.txt')
 puzzle_input_file = open(puzzle_input_file_path,'r')
 puzzle_input = puzzle_input_file.read().splitlines()
 puzzle_input_file.close()
@@ -65,10 +65,10 @@ def find_mapping(map_list,i):
     print(i)     
     return i
 
-
+min_location = sys.maxsize
 for seed in seeds:
     seed = int(seed)
-    min_location = sys.maxsize
+    
 
     soil = find_mapping(seed_to_soil, seed)
     fertilizer = find_mapping(soil_to_fertilizer, soil)
