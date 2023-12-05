@@ -69,16 +69,23 @@ min_location = sys.maxsize
 #print(seeds)
 i = 0
 while i < len(seeds):
-    for seed in range(int(seeds[i]),int(seeds[i])+int(seeds[i+1])):       
-        soil = find_mapping(seed_to_soil, seed)
-        fertilizer = find_mapping(soil_to_fertilizer, soil)
-        water = find_mapping(fertilizer_to_water, fertilizer)
-        light = find_mapping(water_to_light, water)
-        temp = find_mapping(light_to_temperature, light)
-        humidity = find_mapping(temp_to_humidity, temp)
-        location = find_mapping(humidity_to_location, humidity)
-        min_location = min(min_location,location)
-        #print('                  ')
+    seeds_start = int(seeds[i])
+    seeds_end = int(seeds[i]) + int(seeds[i+1])
+
+    if find_mapping(seed_to_soil,seeds_start) != seeds_start and find_mapping(seed_to_soil,seeds_end) != seeds_end:
+
+        for seed in range(int(seeds[i]),int(seeds[i])+int(seeds[i+1])):    
+            #check if mapped first?    
+        
+            soil = find_mapping(seed_to_soil, seed)
+            fertilizer = find_mapping(soil_to_fertilizer, soil)
+            water = find_mapping(fertilizer_to_water, fertilizer)
+            light = find_mapping(water_to_light, water)
+            temp = find_mapping(light_to_temperature, light)
+            humidity = find_mapping(temp_to_humidity, temp)
+            location = find_mapping(humidity_to_location, humidity)
+            min_location = min(min_location,location)
+            #print('                  ')
        
     i+=2
 
