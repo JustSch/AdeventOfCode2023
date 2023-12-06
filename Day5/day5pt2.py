@@ -41,6 +41,10 @@ def create_map(starting,map_list):
 
 seeds = puzzle_input[0].split(':')[1].split()
 
+seed_pairs = []
+for i in range(0,len(seeds),2):
+    seed_pairs.append([int(seeds[i]),int(seeds[i+1]) + int(seeds[i])])
+
 seed_to_soil = []
 soil_to_fertilizer = []
 fertilizer_to_water = []
@@ -65,60 +69,47 @@ def find_mapping(map_list,i):
     #print(i)     
     return i
 
-min_location = sys.maxsize
-#print(seeds)
+
 
 # figure out overlapping ranges?
-def find_ranges(seeds):
-    i = 0
-    seeds_ranges = []
-    while i < len(seeds):
-        seeds_start = int(seeds[i])
-        seeds_end = int(seeds[i]) + int(seeds[i+1])
-        seeds_ranges.append([seeds_start,seeds_end])
-        i+=2
-
-    return sorted(seeds_ranges)
-
-seed_ranges = find_ranges(seeds)
-
-#NEED TO HANDLE MAPPING OVERLAPS!!!!!!!!!
-def check_overlap(list_ranges):
-    sorted_ranges = sorted(list_ranges, key=lambda x: x[1])
-    i = 0
-    while i  < len(sorted_ranges) and i < len(seed_ranges) +1:
-        list_range0 = sorted_ranges[i]
-        list_range1 = sorted_ranges[i+1]
-        print(list_range0)
-        if  max(0, min(list_range0[1] + list_range0[2], list_range1[1] + list_range1[2]) - max(list_range0[1], list_range1[1])):
-            print('yttttttttttttttt')
-        i+=1
-
-check_overlap(soil_to_fertilizer)
 
 
-
-# i = 0
-# while i < len(seeds):
-#     seeds_start = int(seeds[i])
-#     seeds_end = int(seeds[i]) + int(seeds[i+1])
-
-#     if find_mapping(seed_to_soil,seeds_start) != seeds_start and find_mapping(seed_to_soil,seeds_end) != seeds_end:
-
-#         for seed in range(int(seeds[i]),int(seeds[i])+int(seeds[i+1])):    
-#             #check if mapped first?    
-        
-#             soil = find_mapping(seed_to_soil, seed)
-#             fertilizer = find_mapping(soil_to_fertilizer, soil)
-#             water = find_mapping(fertilizer_to_water, fertilizer)
-#             light = find_mapping(water_to_light, water)
-#             temp = find_mapping(light_to_temperature, light)
-#             humidity = find_mapping(temp_to_humidity, temp)
-#             location = find_mapping(humidity_to_location, humidity)
-#             min_location = min(min_location,location)
-#             #print('                  ')
-       
-#     i+=2
+#approach based on https://github.com/Tyranties/AOC-2023/blob/main/day_05/day_05_part_2.py
 
 
-# print(min_location)
+def find_ranges(seed_ranges,list_ranges):
+    
+    new_ranges = []
+    while 0 < len(seed_ranges):
+        seeds_start, seeds_end = seed_ranges.pop()
+        overlapped = False
+        for list_range in list_ranges:
+            overlap_start = max(seeds_start,list_range[1])
+            overlap_end = min(seeds_end,list_range[1] + list_range[2])
+
+            if overlap_start < overlap_end:
+                new_ranges.append([overlap_start - list_range[1] + list_range[0], overlap_end - list_range[1] + list_range[0]])
+                if overlap_start > seeds_start:
+                  seed_ranges.append([list_range[1], overlap_start])
+
+                if overlap_end < seeds_end:
+                    seed_ranges.append([overlap_end,seeds_end])
+                overlapped = True
+                break
+
+        if not overlapped:
+            overlapped = False
+            new_ranges.append([seeds_start,seeds_end])
+    return new_ranges
+
+
+# print(seed_pairs)
+seed_pairs = find_ranges(seed_pairs,seed_to_soil)
+seed_pairs = find_ranges(seed_pairs,soil_to_fertilizer)
+seed_pairs = find_ranges(seed_pairs,fertilizer_to_water)
+seed_pairs = find_ranges(seed_pairs,water_to_light)
+seed_pairs = find_ranges(seed_pairs,light_to_temperature)
+seed_pairs = find_ranges(seed_pairs,temp_to_humidity)
+seed_pairs = find_ranges(seed_pairs,humidity_to_location)
+
+print(min(seed_pairs)[0])
