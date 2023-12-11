@@ -59,4 +59,4 @@ for y in lines_to_double_y:
 
 #now that its expanded find shortest path
 
-#djikstra's but on each vertex?
+#BFS to find distances then djisktras?
