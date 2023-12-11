@@ -2,3 +2,4 @@ day6p1 binary search attempt
 day7
 day8
 day10 (connected components?)
+day11
